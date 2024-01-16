@@ -1,0 +1,104 @@
+﻿@using WebApplication1.Controllers;
+
+@{
+    ViewData["Title"] = "GetUserList";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@model List<UserModel>
+
+@{
+    ViewData["Title"] = "User List";
+}
+<link rel="stylesheet" href="https://cdn.datatables.net/1.13.7/css/jquery.dataTables.min.css" />
+<link rel="stylesheet" href="https://cdn.datatables.net/buttons/2.4.2/css/buttons.dataTables.min.css" />
+<h2>Kişiler</h2>
+
+@using (Html.BeginForm("GetUserList", "User", FormMethod.Post))
+{
+    <label for="selectedCourseId">Kurs Seçiniz:</label>
+    @Html.DropDownList("selectedCourseId", (SelectList)ViewBag.CourseList, "Select a Course", new { @class = "form-control" })
+    <br />
+    <input type="submit" value="Kullanıcıları Durumlarını Getir" class="btn btn-primary" />
+}
+
+@if (Model != null && Model.Any())
+{
+    <div class="container" style="margin-top:3%;"  >
+        <table id="userList" class="display nowrap" style="width:100%">
+            <thead>
+                <tr>
+                    <th>Kullanıcı ID</th>
+                    <th>Kullanıcı Adı</th>
+                    <th>Kurs ID</th>
+                    <th>Kurs Durumu</th>
+                    <th>Toplam Ders Sayısı </th>
+                    <th>İzlenen Ders Sayısı</th>
+                    <th>Kurs Başlama Zamanı </th>
+                    <th>Kurs Bitirme Zamanı </th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var user in Model)
+                {
+                    <tr>
+                        <td>@user.Id</td>
+                        <td>@user.Name</td>
+                        <td>@ViewBag.Courseıd</td>
+                        <td>@user.progress_status</td>
+                        <td>@user.steps_total</td>
+                        <td>@user.steps_completed</td>
+                        <td>@user.date_started</td>
+                        <td>@user.date_completed</td>
+
+                    </tr>
+                }
+
+            </tbody>
+            <tfoot>
+                <tr>
+                    <th>Kullanıcı ID</th>
+                    <th>Kullanıcı Adı</th>
+                    <th>Kurs ID</th>
+                    <th>Kurs Durumu</th>
+                    <th>Toplam Ders Sayısı </th>
+                    <th>İzlenen Ders Sayısı</th>
+                    <th>Kurs Başlama Zamanı </th>
+                    <th>Kurs Bitirme Zamanı </th>
+                </tr>
+            </tfoot>
+        </table>
+    </div>
+}
+else
+{
+    <p>No users found.</p>
+}
+
+
+
+
+
+
+@section Scripts{
+    <script src="https://code.jquery.com/jquery-3.7.0.js"></script>
+    <script src="https://cdn.datatables.net/1.13.7/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/2.4.2/js/dataTables.buttons.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/pdfmake.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js"></script>
+    <script src="https://cdn.datatables.net/buttons/2.4.2/js/buttons.html5.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/2.4.2/js/buttons.print.min.js"></script>
+    <script>
+
+        $(document).ready(function () {
+            $('#userList').DataTable({
+                dom: 'Bfrtip',
+                buttons: [
+                    'copy', 'csv', 'excel', 'pdf', 'print'
+                ]
+            });
+        });
+
+    </script>
+}
